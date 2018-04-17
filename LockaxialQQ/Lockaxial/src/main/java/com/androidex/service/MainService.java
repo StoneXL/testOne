@@ -2685,6 +2685,7 @@ public class MainService extends Service {
                         getLastAdvertisementList();
                         sleep(DeviceConfig.AD_REFRESH_WAIT_TIME); //等待广告刷新的时间
                         //retrieveChangedFingerList();
+                        Log.i(TAG, "等待广告刷新的时间");
                         retrieveChangedCardList();
                     }
                 } catch (InterruptedException e) {
@@ -2699,6 +2700,7 @@ public class MainService extends Service {
         String url = DeviceConfig.SERVER_URL + "/app/device/retrieveCardList?communityId=" + this
                 .communityId + "&blockId=" + this.blockId + "&lockId=" + this.lockId;
         try {
+            Log.i(TAG, "retrieveCardList--url=" + url);
             String result = HttpApi.getInstance().loadHttpforGet(url, httpServerToken);
             if (result != null) {
                 HttpApi.i("retrieveCardList()->" + result);
@@ -3132,10 +3134,12 @@ public class MainService extends Service {
         String url = DeviceConfig.SERVER_URL +
                 "/app/advertisement/checkAdvertiseList?communityId=" + this.communityId;
         url = url + "&lockId=" + this.lockId;
+        Log.i(TAG, "url="+url);
         JSONArray rows = null;
         try {
             String result = HttpApi.getInstance().loadHttpforGet(url, httpServerToken);
             if (result != null) {
+                Log.i(TAG, "result="+result);
                 HttpApi.i("checkAdvertiseList()->" + result);
                 JSONObject obj = Ajax.getJSONObject(result);
                 int resultCode = obj.getInt("code");
@@ -3241,6 +3245,7 @@ public class MainService extends Service {
     }
 
     protected void adjustAdvertiseFiles() {
+        Log.i(TAG, "adjustAdvertiseFiles");
         String SDCard = Environment.getExternalStorageDirectory() + "";
         String localFilePath = SDCard + "/" + DeviceConfig.LOCAL_FILE_PATH + "/";//文件存储路径
         Enumeration<String> keys = currentAdvertisementFiles.keys();
