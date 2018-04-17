@@ -40,6 +40,7 @@ import jni.util.Utils;
 import static com.tencent.devicedemo.MainActivity.INPUT_SYSTEMSET_REQUESTCODE;
 
 public class InitActivity extends AndroidExActivityBase {
+    public static final String tag = "InitActivity";
     public static final int MSG_NO_MAC_ADDRESS = 30001;
     public static final int MSG_GET_MAC_ADDRESS = 30002;
     public static final int MSG_LOGIN = 30003;
@@ -78,13 +79,13 @@ public class InitActivity extends AndroidExActivityBase {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.v("InitActivity", "------>start init InitActivity<-------");
+        Log.v(tag, "------>start init InitActivity<-------");
         requestWindowFeature(getWindow().FEATURE_NO_TITLE);
         setContentView(R.layout.activity_init);
         mainLayout = (LinearLayout) findViewById(R.id.mainLayout);
         initHandler();
         initVoiceHandler();
-        Log.v("InitActivity", "------>start MainService<-------");
+        Log.v(tag, "------>start MainService<-------");
         startMainService();
         //closeBar(this);
         initView();
@@ -181,6 +182,7 @@ public class InitActivity extends AndroidExActivityBase {
                 } else if (msg.what == MSG_GET_MAC_ADDRESS) {
                     setStatusText("获取设备编号：" + (String) msg.obj);
                 } else if (msg.what == MSG_LOGIN) {
+                    Log.i(tag, "初始化页面 登陆成功");
                     JSONObject result = (JSONObject) msg.obj;
                     try {
                         int code = result.getInt("code");
