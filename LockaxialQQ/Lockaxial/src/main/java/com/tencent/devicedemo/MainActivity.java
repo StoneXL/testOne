@@ -220,9 +220,9 @@ public class MainActivity extends AndroidExActivityBase implements NfcReader.Acc
     private static final String REFRESH_RSSI = "REFRESH_RSSI";//获取蓝牙信号强度
     public static int currentStatus = CALL_MODE;
     public static int READER_FLAGS = NfcAdapter.FLAG_READER_NFC_A | NfcAdapter.FLAG_READER_SKIP_NDEF_CHECK;
-    private View container;
+    private View container;     //根View
     private LinearLayout videoLayout;
-    private RelativeLayout rl_nfc, rl;
+    private RelativeLayout rl_nfc, rl;     //录卡布局和网络检测提示布局
     private GridView mGridView;
     private ImageView iv_setting, bluetooth_image, iv_bind, imageView, wifi_image;
     private TextView headPaneTextView, tv_message, tv_input_text;
@@ -241,8 +241,8 @@ public class MainActivity extends AndroidExActivityBase implements NfcReader.Acc
     private int blockId = 0;
     private int keyVoiceIndex = 0;
     private int dialogtime = 0;
-    private boolean nfcFlag = false;
-    private boolean isFlag = true;
+    private boolean nfcFlag = false;          //录卡页面是否显示的标识
+    private boolean isFlag = true;            //楼栋编号焦点监听的标识
     private boolean flag = false;//控制开始接通时，相机为空则再接通
     private boolean mScanning = false;//控制蓝牙扫描
     private boolean isConnectBLE = false;//蓝牙是否连接
@@ -253,7 +253,7 @@ public class MainActivity extends AndroidExActivityBase implements NfcReader.Acc
     private String lastImageUuid = "";
     private String blockNo = "";
     private String guestPassword = "";
-    private String cardId;
+    private String cardId;               //卡ID
     private String nfcMessage = "请将卡片放到感应区域，按确认键\n确定录入卡片，按删除键取消录入卡片";
     private SurfaceView localView = null;
     private SurfaceView remoteView = null;
@@ -317,10 +317,10 @@ public class MainActivity extends AndroidExActivityBase implements NfcReader.Acc
         {
             ActionBar ab = getActionBar();
             if (ab != null)
-                ab.setDisplayHomeAsUpEnabled(true);
+                ab.setDisplayHomeAsUpEnabled(true);//左上角显示应用程序图标
         }
         setContentView(R.layout.activity_main);
-        hwservice.EnterFullScreen();
+        hwservice.EnterFullScreen();//hwservice为appLibs的服务
         initView();//初始化View
         initScreen();
         initHandler();
@@ -358,30 +358,31 @@ public class MainActivity extends AndroidExActivityBase implements NfcReader.Acc
      */
     public void initView() {
         container = findViewById(R.id.container);//根View
-        rl_nfc = (RelativeLayout) findViewById(R.id.rl_nfc);
-        et_blackno = (EditText) findViewById(R.id.et_blockno);
-        et_unitno = (EditText) findViewById(R.id.et_unitno);
-        iv_bind = (ImageView) findViewById(R.id.user_bind);
-        imageView = (ImageView) findViewById(R.id.iv_erweima);
+        rl_nfc = (RelativeLayout) findViewById(R.id.rl_nfc);//录卡布局
+        et_blackno = (EditText) findViewById(R.id.et_blockno);//楼栋编号
+        et_unitno = (EditText) findViewById(R.id.et_unitno);//房屋编号
+        iv_bind = (ImageView) findViewById(R.id.user_bind);//QQ物联标志
+        imageView = (ImageView) findViewById(R.id.iv_erweima);//二维码
         wifi_image = (ImageView) findViewById(R.id.wifi_image); //wifi图标控件初始化
-        iv_setting = (ImageView) findViewById(R.id.iv_setting);
-        bluetooth_image = (ImageView) findViewById(R.id.bluetooth_image);
-        tv_message = (TextView) findViewById(R.id.tv_message);
-        viewPager = (AutoScrollViewPager) findViewById(R.id.vp_main);
-        tv_input_text = (TextView) findViewById(R.id.tv_input_text);
+        iv_setting = (ImageView) findViewById(R.id.iv_setting);//左上角弹出框按钮
+        bluetooth_image = (ImageView) findViewById(R.id.bluetooth_image);//蓝牙按钮
+        tv_message = (TextView) findViewById(R.id.tv_message);//录入卡提示信息
+        viewPager = (AutoScrollViewPager) findViewById(R.id.vp_main);//轮播图
+        tv_input_text = (TextView) findViewById(R.id.tv_input_text);//桌面会话状态的提示信息
         tv_battery = (TextView) findViewById(R.id.tv_battery);//显示蓝牙锁的电量
-        mGridView = (GridView) findViewById(R.id.gridView_binderlist);//getBgBanners();//网络获得轮播背景图片数据
-        rl = (RelativeLayout) findViewById(R.id.net_view_rl);
+        mGridView = (GridView) findViewById(R.id.gridView_binderlist);//QQ物联相关（应该用于显示绑定用户
+        //getBgBanners();//网络获得轮播背景图片数据
+        rl = (RelativeLayout) findViewById(R.id.net_view_rl);//网络检测提示布局
         rl.setOnClickListener(this);
-        showMacText = (TextView) findViewById(R.id.show_mac);
+        showMacText = (TextView) findViewById(R.id.show_mac);//mac地址
         iv_setting.setOnClickListener(this);
         mAdapter = new BinderListAdapter(this);
         mGridView.setAdapter(mAdapter);
         sendBroadcast(new Intent("com.android.action.hide_navigationbar"));//隱藏底部導航
         setFullScreenView(container);
         setFullScreen(true);//禁止頂部下拉
-        Typeface typeFace = Typeface.createFromAsset(getAssets(), "fonts/GBK.TTF");
-        tv_input = (EditText) findViewById(R.id.tv_input);
+        Typeface typeFace = Typeface.createFromAsset(getAssets(), "fonts/GBK.TTF");//字体设置
+        tv_input = (EditText) findViewById(R.id.tv_input);//完全不知道干嘛用
         tv_input.setTypeface(typeFace);// com_log.setTypeface(typeFace);
         et_blackno.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -393,7 +394,8 @@ public class MainActivity extends AndroidExActivityBase implements NfcReader.Acc
                 }
             }
         });
-        //getQR();//生成二维码
+        // TODO: 2018/4/14 注释
+//        getQR();//生成二维码
     }
 
     /**
@@ -818,7 +820,8 @@ public class MainActivity extends AndroidExActivityBase implements NfcReader.Acc
         bindService(i, connection, Service.BIND_AUTO_CREATE);
 
         Intent startIntent = new Intent(MainActivity.this, TXDeviceService.class);
-       // startService(startIntent);
+        // TODO: 2018/4/14 注释
+//        startService(startIntent);
 
          /*Intent i = new Intent(this, SpeechService.class);
         startService(i);*/
@@ -827,11 +830,14 @@ public class MainActivity extends AndroidExActivityBase implements NfcReader.Acc
         startService(dlIntent);
     }
 
+    /**
+     * 初始化视频通话布局
+     */
     protected void initScreen() {
         //callLayout=(LinearLayout) findViewById(R.id.call_pane);
         //guestLayout=(LinearLayout) findViewById(R.id.guest_pane);
-        headPaneTextView = (TextView) findViewById(R.id.header_pane);
-        videoLayout = (LinearLayout) findViewById(R.id.ll_video);
+        headPaneTextView = (TextView) findViewById(R.id.header_pane);//可视对讲设备状态
+        videoLayout = (LinearLayout) findViewById(R.id.ll_video);//用于添加视频通话的根布局
 
 //        videoPane = (LinearLayout) findViewById(R.id.video_pane);
 //        imagePane = (LinearLayout) findViewById(R.id.image_pane);
@@ -924,6 +930,9 @@ public class MainActivity extends AndroidExActivityBase implements NfcReader.Acc
         audioManager.setStreamVolume(type, thisValue, AudioManager.FLAG_PLAY_SOUND);
     }
 
+    /**
+     * 初始化handler
+     */
     private void initHandler() {
         handler = new Handler() {
             @Override
@@ -1041,7 +1050,7 @@ public class MainActivity extends AndroidExActivityBase implements NfcReader.Acc
                         @Override
                         public void run() {
                             String cmd = "pm -r install " + filePath;
-                            ShellUtils.execCommand(cmd,false);
+                            ShellUtils.execCommand(cmd, false);
                         }
                     }).start();
 //                    ShellUtils shellUtils = new ShellUtils();
@@ -1603,9 +1612,10 @@ public class MainActivity extends AndroidExActivityBase implements NfcReader.Acc
                         nfcFlag = true;
                         cardId = null;
                         isFlag = true;
-                        et_blackno.setFocusable(true);
-                        et_blackno.setFocusableInTouchMode(true);
-                        et_blackno.requestFocus();
+
+                        //房屋号输入栏强制获取焦点
+                        getFocus(et_blackno);
+
                         et_blackno.setText("");
                         et_unitno.setText("");
                         break;
@@ -1623,18 +1633,27 @@ public class MainActivity extends AndroidExActivityBase implements NfcReader.Acc
     }
 
     /**
+     * 强制让控件获取焦点
+     *
+     * @param view
+     */
+    private void getFocus(View view) {
+        view.setFocusable(true);//普通物理方式获取焦点
+        view.setFocusableInTouchMode(true);//触摸模式获取焦点,不是触摸屏啊
+        view.requestFocus();//要求获取焦点
+    }
+
+    /**
      * 录入卡片信息
      *
      * @param keyCode
      */
     private void inputCardInfo(int keyCode) {
-        String black = et_blackno.getText().toString();
-        String unit = et_unitno.getText().toString();
+        String black = et_blackno.getText().toString();//楼栋编号
+        String unit = et_unitno.getText().toString();//房屋编号
         if (keyCode == KeyEvent.KEYCODE_STAR || keyCode == DeviceConfig.DEVICE_KEYCODE_STAR) {//取消
             if (!isFlag && (unit == null || unit.equals(""))) {//返回到房屋输入框
-                et_blackno.setFocusable(true);
-                et_blackno.setFocusableInTouchMode(true);
-                et_blackno.requestFocus();
+                getFocus(et_blackno);
             }
             if (isFlag && !(black == null || black.equals(""))) {//删除输入的房屋数字
                 blockNo = backKey(blockNo);
@@ -1657,6 +1676,7 @@ public class MainActivity extends AndroidExActivityBase implements NfcReader.Acc
                     if (!blockNo.equals("")) {
                         blockNo = "";
                     }
+//                    getFocus(et_unitno);
                     et_unitno.setFocusable(true);
                     et_unitno.setFocusableInTouchMode(true);
                     et_unitno.requestFocus();
@@ -1791,18 +1811,21 @@ public class MainActivity extends AndroidExActivityBase implements NfcReader.Acc
         });
     }
 
+
     private void initVideoViews() {
         if (localView != null) return;
-        if (MainService.callConnection != null)
+        if (MainService.callConnection != null) {
             localView = (SurfaceView) MainService.callConnection.createVideoView(true, this, true);
+        }
         localView.setVisibility(View.INVISIBLE);
         videoLayout.addView(localView);
         localView.setKeepScreenOn(true);
         localView.setZOrderMediaOverlay(true);
         localView.setZOrderOnTop(true);
 
-        if (MainService.callConnection != null)
+        if (MainService.callConnection != null) {
             remoteView = (SurfaceView) MainService.callConnection.createVideoView(false, this, true);
+        }
         remoteView.setVisibility(View.INVISIBLE);
         remoteView.setKeepScreenOn(true);
         remoteView.setZOrderMediaOverlay(true);
@@ -1847,6 +1870,7 @@ public class MainActivity extends AndroidExActivityBase implements NfcReader.Acc
         });
     }
 
+    //设置桌面会话的状态
     private void setDialValue(String value) {
         final String thisValue = value;
         handler.post(new Runnable() {
@@ -1912,7 +1936,7 @@ public class MainActivity extends AndroidExActivityBase implements NfcReader.Acc
 
     /**********xiaozd add****************************/
     private int netWorkFlag = -1;
-    private TextView showMacText;
+    private TextView showMacText;//mac地址
     private boolean checkTime = false;
     private Timer netTimer = new Timer();
 
@@ -2816,8 +2840,8 @@ public class MainActivity extends AndroidExActivityBase implements NfcReader.Acc
     //人脸识别
     AFT_FSDKFace mAFT_FSDKFace = null;
     private int mWidth, mHeight;
-    private CameraSurfaceView mSurfaceView;
-    private CameraGLSurfaceView mGLSurfaceView;
+    private CameraSurfaceView mSurfaceView;//用于人脸识别视频播放
+    private CameraGLSurfaceView mGLSurfaceView;//用于人脸识别视频播放
     private Camera mCamera;
 
     AFT_FSDKVersion version = new AFT_FSDKVersion();

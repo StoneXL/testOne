@@ -13,6 +13,7 @@ import android.view.WindowManager;
 import com.tencent.devicedemo.R;
 
 /**
+ * 门禁开锁的弹框
  * @author liyp
  * @editTime 2017/11/22
  */
