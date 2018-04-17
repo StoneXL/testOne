@@ -393,7 +393,7 @@ public class MainActivity extends AndroidExActivityBase implements NfcReader.Acc
                 }
             }
         });
-        getQR();//生成二维码
+        //getQR();//生成二维码
     }
 
     /**
@@ -818,7 +818,7 @@ public class MainActivity extends AndroidExActivityBase implements NfcReader.Acc
         bindService(i, connection, Service.BIND_AUTO_CREATE);
 
         Intent startIntent = new Intent(MainActivity.this, TXDeviceService.class);
-        startService(startIntent);
+       // startService(startIntent);
 
          /*Intent i = new Intent(this, SpeechService.class);
         startService(i);*/

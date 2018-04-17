@@ -306,6 +306,7 @@ public class MainService extends Service {
             public void handleMessage(Message msg) {
                 if (msg.what == REGISTER_ACTIVITY_INIT) { //InitActivity入口
                     netWorkstate = (boolean) msg.obj;
+                    Log.i(TAG, "InitActivity启动mainservice服务连接  MainServic开始初始化"+"----netWorkstate"+netWorkstate);
                     initMessenger = msg.replyTo;
                     init();
                     HttpApi.i("MainServic开始初始化");
@@ -868,6 +869,12 @@ public class MainService extends Service {
         }.start();
     }
 
+    /**
+     * 联网成功后登陆获取当前设备的登陆信息
+     *
+     * @return
+     * @throws JSONException
+     */
     protected boolean getClientInfo() throws JSONException {
         boolean resultValue = false;
         try {
@@ -1270,13 +1277,20 @@ public class MainService extends Service {
         editor.commit();
     }
 
+    /**
+     * 登陆成功返回的信息
+     *
+     * @param msg
+     */
     protected void onLogin(Message msg) {
+        Log.i(TAG, "登陆成功");
         JSONObject result = (JSONObject) msg.obj;
         try {
             int code = result.getInt("code");
             JSONObject user = null;
             if (code == 0) {
                 user = result.getJSONObject("user");
+                Log.i(TAG, "登陆信息：" + user.toString());
                 this.blockId = (Integer) user.get("blockId");
                 this.communityId = (Integer) user.get("communityId");
                 this.lockId = (Integer) user.get("rid");
