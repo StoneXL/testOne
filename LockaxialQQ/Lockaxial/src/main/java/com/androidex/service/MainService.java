@@ -1268,6 +1268,7 @@ public class MainService extends Service {
     }
 
     protected void saveInfoIntoLocal(int communityId, int blockId, int lockId, String communityName, String lockName) {
+        Log.i(TAG, "saveInfoIntoLocal");
         SharedPreferences sharedPreferences = getSharedPreferences("residential", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putInt("communityId", communityId);
