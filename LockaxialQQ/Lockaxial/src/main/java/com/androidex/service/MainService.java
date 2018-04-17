@@ -512,7 +512,7 @@ public class MainService extends Service {
             }
             initLock();
             //sendInitMessenger(InitActivity.MSG_INIT_RFID);
-        }
+         }
     }*/
 
     protected void initAssembleUtil() {
@@ -873,6 +873,7 @@ public class MainService extends Service {
         try {
             String url = DeviceConfig.SERVER_URL + "/app/auth/deviceLogin";
             JSONObject data = new JSONObject();
+            Log.i(TAG, "mac-->" + mac + "-------" + "key-->" + key);
             data.put("username", mac);
             data.put("password", key);
             String result = HttpApi.getInstance().loadHttpforPost(url, data, httpServerToken);
@@ -2335,8 +2336,8 @@ public class MainService extends Service {
 
         @Override
         public void onVideo() {
-            rtcClient.enableSpeaker(audioManager,true);
-            Log.i("xiao","接通视频通话,并默认为免提");
+            rtcClient.enableSpeaker(audioManager, true);
+            Log.i("xiao", "接通视频通话,并默认为免提");
             Message message = Message.obtain();
             message.what = MSG_RTC_ONVIDEO;
             try {
@@ -3263,7 +3264,7 @@ public class MainService extends Service {
     //开启版本更新检测
     protected void startCheckThread() {
         Log.v("UpdateService", "start Check Thread");
-        if(checkThread != null){
+        if (checkThread != null) {
             checkThread.interrupt();
         }
         checkThread = new Thread() {
@@ -3538,10 +3539,10 @@ public class MainService extends Service {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                String cmd = "pm install -r "+ fileName;
-                HttpApi.i("安装命令："+cmd);
+                String cmd = "pm install -r " + fileName;
+                HttpApi.i("安装命令：" + cmd);
                 ShellUtils.CommandResult result = InstallUtil.executeCmd(cmd);
-                HttpApi.i("安装结果："+result.toString());
+                HttpApi.i("安装结果：" + result.toString());
             }
         }).start();
     }
