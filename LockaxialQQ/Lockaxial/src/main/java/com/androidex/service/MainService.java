@@ -1258,6 +1258,7 @@ public class MainService extends Service {
     }
 
     protected void loadInfoFromLocal() {
+        Log.i(TAG, "loadInfoFromLocal");
         SharedPreferences sharedPreferences = getSharedPreferences("residential", Activity.MODE_PRIVATE);
         communityId = sharedPreferences.getInt("communityId", 0);
         blockId = sharedPreferences.getInt("blockId", 0);
